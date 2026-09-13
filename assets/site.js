@@ -1,9 +1,9 @@
 (() => {
   const sourceAddress = document.getElementById("source-address");
-  const routeLine = document.querySelector(".route-line");
+  const hero = document.querySelector(".hero");
   const brand = document.querySelector(".brand");
-  const pocket = document.querySelector(".pocket");
   const copyButton = document.getElementById("copy-source");
+  const copyLabel = copyButton.querySelector("span");
   const copyStatus = document.getElementById("copy-status");
   const searchInput = document.getElementById("package-search");
   const sectionFilter = document.getElementById("section-filter");
@@ -13,14 +13,7 @@
 
   let packages = [];
   let copyTimer;
-  let bellTimer;
-  let routeTimer;
-
-  function setRouteDistance() {
-    if (!routeLine) return;
-    const packetWidth = 9;
-    routeLine.style.setProperty("--route-distance", `${Math.max(0, routeLine.clientWidth - packetWidth)}px`);
-  }
+  let animationTimer;
 
   function parseControlFile(source) {
     return source.trim().split(/\n\s*\n/).map((stanza) => {
@@ -31,7 +24,7 @@
         if (/^[\t ]/.test(line)) {
           if (current) {
             const continuation = line.trim();
-            fields[current] += continuation === "." ? " " : ` ${continuation}`;
+            fields[current] += continuation === "." ? " " : " " + continuation;
           }
           continue;
         }
@@ -49,14 +42,19 @@
   function readableSize(value) {
     const bytes = Number(value);
     if (!Number.isFinite(bytes) || bytes <= 0) return "";
-    if (bytes < 1024 * 1024) return `${Math.max(1, Math.round(bytes / 1024))} KB`;
-    return `${(bytes / (1024 * 1024)).toFixed(1)} MB`;
+    if (bytes < 1024 * 1024) return Math.max(1, Math.round(bytes / 1024)) + " KB";
+    return (bytes / (1024 * 1024)).toFixed(1) + " MB";
   }
 
   function safePackageHref(filename) {
-    if (!filename || !filename.startsWith("pool/")) return "";
-    if (filename.split("/").includes("..")) return "";
-    return new URL(filename, window.location.href).href;
+    if (!filename || !filename.startsWith("pool/") || filename.split("/").includes("..")) return "";
+    try {
+      const url = new URL(filename, window.location.href);
+      const poolRoot = new URL("pool/", window.location.href);
+      return url.origin === poolRoot.origin && url.pathname.startsWith(poolRoot.pathname) ? url.href : "";
+    } catch {
+      return "";
+    }
   }
 
   function addText(parent, tag, className, value) {
@@ -72,7 +70,7 @@
     row.className = "package-row";
     if (index < 8) {
       row.classList.add("package-row--enter");
-      row.style.setProperty("--row-delay", `${index * 42}ms`);
+      row.style.setProperty("--row-delay", (index * 42) + "ms");
     }
 
     addText(row, "span", "package-number", String(index + 1).padStart(2, "0"));
@@ -91,18 +89,19 @@
 
     const metadata = document.createElement("p");
     metadata.className = "package-meta";
-    const metaValues = [packageData.Architecture, packageData.Section, readableSize(packageData.Size)].filter(Boolean);
-    metadata.textContent = metaValues.join(" · ");
+    const values = [packageData.Architecture, packageData.Section, readableSize(packageData.Size)].filter(Boolean);
+    metadata.textContent = values.join(" · ");
     main.append(metadata);
 
-    if (packageData.Depends) {
+    const dependencyText = [
+      packageData["Pre-Depends"] && "Pre-depends: " + packageData["Pre-Depends"],
+      packageData.Depends && "Depends: " + packageData.Depends,
+    ].filter(Boolean).join(" · ");
+    if (dependencyText) {
       const details = document.createElement("details");
       details.className = "package-details";
-      const summary = document.createElement("summary");
-      summary.textContent = "Dependencies";
-      const dependencies = document.createElement("code");
-      dependencies.textContent = packageData.Depends;
-      details.append(summary, dependencies);
+      addText(details, "summary", "", "Dependencies");
+      addText(details, "code", "", dependencyText);
       main.append(details);
     }
 
@@ -115,8 +114,8 @@
       const download = document.createElement("a");
       download.className = "download-link";
       download.href = href;
-      download.textContent = "Download .deb";
-      download.setAttribute("aria-label", `Download ${packageData.Package} ${packageData.Version}`);
+      download.textContent = "Get .deb";
+      download.setAttribute("aria-label", "Download " + packageData.Package + " " + packageData.Version);
       actions.append(download);
     }
     row.append(actions);
@@ -127,21 +126,22 @@
     const query = (searchInput.value || "").trim().toLowerCase();
     const section = sectionFilter.value;
     const filtered = packages.filter((pkg) => {
-      const searchText = [pkg.Package, pkg.Version, pkg.Description, pkg.Architecture, pkg.Depends]
+      const searchable = [pkg.Package, pkg.Version, pkg.Description, pkg.Architecture, pkg.Section, pkg.Depends]
         .join(" ").toLowerCase();
-      return (!query || searchText.includes(query)) && (!section || pkg.Section === section);
+      return (!query || searchable.includes(query)) && (!section || pkg.Section === section);
     });
 
     const fragment = document.createDocumentFragment();
     filtered.forEach((pkg, index) => fragment.append(makePackageRow(pkg, index)));
     packageList.replaceChildren(fragment);
-    const totalLabel = `${packages.length} ${packages.length === 1 ? "package" : "packages"}`;
+
+    const totalLabel = packages.length + " " + (packages.length === 1 ? "package" : "packages");
     packageCount.textContent = filtered.length === packages.length
       ? totalLabel
-      : `${filtered.length} of ${totalLabel}`;
+      : filtered.length + " of " + totalLabel;
 
     if (filtered.length === 0) {
-      packageStatus.textContent = packages.length ? "No packages match that filter." : "No packages are listed yet.";
+      packageStatus.textContent = packages.length ? "Nothing in this pocket matches." : "No packages are listed yet.";
       packageStatus.hidden = false;
     } else {
       packageStatus.textContent = "";
@@ -172,44 +172,48 @@
         input.style.opacity = "0";
         document.body.append(input);
         input.select();
-        const success = document.execCommand("copy");
+        const copied = document.execCommand("copy");
         input.remove();
-        if (!success) throw new Error("Copy command failed");
+        if (!copied) throw new Error("Copy command failed");
       }
-      copyButton.textContent = "Copied";
+      copyLabel.textContent = "Copied!";
       copyButton.classList.add("is-copied");
-      copyStatus.textContent = "Source URL copied to clipboard.";
+      copyStatus.textContent = "Ready to paste into Sileo or Zebra.";
       brand.classList.remove("is-copied");
-      requestAnimationFrame(() => brand.classList.add("is-copied"));
-      window.clearTimeout(bellTimer);
-      bellTimer = window.setTimeout(() => brand.classList.remove("is-copied"), 520);
-      pocket.classList.remove("is-sending");
-      requestAnimationFrame(() => pocket.classList.add("is-sending"));
-      window.clearTimeout(routeTimer);
-      routeTimer = window.setTimeout(() => pocket.classList.remove("is-sending"), 720);
+      hero.classList.remove("is-copying");
+      requestAnimationFrame(() => {
+        brand.classList.add("is-copied");
+        hero.classList.add("is-copying");
+      });
+      window.clearTimeout(animationTimer);
+      animationTimer = window.setTimeout(() => {
+        brand.classList.remove("is-copied");
+        hero.classList.remove("is-copying");
+      }, 700);
     } catch {
-      copyStatus.textContent = "Copy failed — select the URL and copy it manually.";
+      copyStatus.textContent = "Copy failed — select the URL above and copy it manually.";
     }
+
     window.clearTimeout(copyTimer);
     copyTimer = window.setTimeout(() => {
-      copyButton.textContent = "Copy URL";
+      copyLabel.textContent = "Copy URL";
       copyButton.classList.remove("is-copied");
-    }, 1600);
+    }, 1700);
   }
 
   async function loadIndex() {
     try {
       const response = await fetch("Packages", { cache: "no-cache" });
-      if (!response.ok) throw new Error(`Index request returned ${response.status}`);
+      if (!response.ok) throw new Error("Index request failed");
       packages = parseControlFile(await response.text());
       setSections();
       packageList.classList.add("is-entering");
       renderPackages();
       requestAnimationFrame(() => document.documentElement.classList.add("index-ready"));
-      window.setTimeout(() => packageList.classList.remove("is-entering"), 1000);
+      window.setTimeout(() => packageList.classList.remove("is-entering"), 1100);
     } catch {
-      packageCount.textContent = "Index unavailable";
-      packageStatus.textContent = "Could not load Packages. Use the raw APT index link or try again later.";
+      packageCount.textContent = "Index offline";
+      packageStatus.textContent = "Couldn't open the package index. Try the raw index link.";
       packageStatus.hidden = false;
       document.documentElement.classList.add("index-ready");
     }
@@ -224,7 +228,18 @@
     packageList.classList.remove("is-entering");
     renderPackages();
   });
-  setRouteDistance();
-  window.addEventListener("resize", setRouteDistance, { passive: true });
+  document.addEventListener("keydown", (event) => {
+    const target = event.target;
+    const typing = target instanceof HTMLElement
+      && (target.isContentEditable || /^(INPUT|TEXTAREA|SELECT)$/.test(target.tagName));
+    if (event.key === "/" && !typing && !event.metaKey && !event.ctrlKey && !event.altKey) {
+      event.preventDefault();
+      searchInput.focus();
+    } else if (event.key === "Escape" && document.activeElement === searchInput) {
+      searchInput.value = "";
+      renderPackages();
+    }
+  });
+
   loadIndex();
 })();
