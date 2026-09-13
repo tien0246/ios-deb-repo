@@ -3,160 +3,64 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="theme-color" content="#5886da">
-  <meta name="description" content="A little pocket of packages for iOS. Add this APT source in Sileo or Zebra.">
-  <title>repo — a 4D pocket for iOS</title>
+  <meta name="theme-color" content="#ffffff">
+  <meta name="description" content="Browse and download packages from this iOS APT repository.">
+  <title>repo — iOS packages</title>
   <link rel="stylesheet" href="assets/site.css">
   <script src="assets/site.js" defer></script>
 </head>
 <body>
-  <a class="skip-link" href="#main">Skip to content</a>
+  <a class="skip-link" href="#main">Skip to packages</a>
 
-  <header class="topbar">
-    <div class="shell topbar__inner">
+  <header class="site-header">
+    <div class="shell site-header__inner">
       <a class="brand" href="./" aria-label="repo home">
-        <svg class="brand__mark" viewBox="0 0 40 40" aria-hidden="true">
-          <circle cx="20" cy="18" r="14" fill="#fff" stroke="currentColor" stroke-width="3"/>
-          <circle cx="15.5" cy="16" r="1.6" fill="#182744"/>
-          <circle cx="24.5" cy="16" r="1.6" fill="#182744"/>
-          <path d="M17 22q3 4 6 0" fill="none" stroke="#182744" stroke-width="1.7" stroke-linecap="round"/>
-          <path d="M16 30h8" stroke="#e64b58" stroke-width="3" stroke-linecap="round"/>
-          <circle class="brand__bell" cx="20" cy="31" r="3.2" fill="#ffd65a" stroke="#b88119" stroke-width="1"/>
+        <svg class="brand__mark" viewBox="0 0 24 24" aria-hidden="true">
+          <path d="M3.5 8h17v12h-17zM3.5 10.5h17" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"/>
+          <path d="M8 5.5V8" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/>
+          <path d="M10.2 8V6.2a1.8 1.8 0 0 1 3.6 0V8" fill="#ffd65a" stroke="#8b6411" stroke-width="1.1"/>
         </svg>
-        <span class="brand__word">repo<span class="brand__dot">.</span></span>
+        <span>repo</span>
       </a>
-      <nav class="topnav" aria-label="Main navigation">
-        <a href="#packages">Packages</a>
-        <a href="https://github.com/tien0246/repo" target="_blank" rel="noreferrer">
-          GitHub
-          <svg viewBox="0 0 16 16" aria-hidden="true"><path d="M5 3h8v8M13 3 4 12" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
-        </a>
-      </nav>
+      <a class="github-link" href="https://github.com/tien0246/repo" target="_blank" rel="noreferrer">
+        GitHub
+        <svg viewBox="0 0 16 16" aria-hidden="true"><path d="M5 3h8v8M13 3 4 12" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </a>
     </div>
   </header>
 
-  <main id="main">
-    <section class="hero shell" aria-labelledby="hero-title">
-      <div class="hero__copy">
-        <p class="eyebrow"><span class="eyebrow__dot"></span> APT SOURCE <span class="eyebrow__slash">/</span> iOS</p>
-        <h1 id="hero-title">A little<br>4D <span>pocket.</span></h1>
-        <p class="hero__lede">A tiny source for Sileo and Zebra.</p>
-
-        <div class="source-box" id="add-source">
-          <p class="source-box__label">
-            <svg viewBox="0 0 20 20" aria-hidden="true"><path d="M3 6.5h14v10H3zM3 9h14M7 4v2.5" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/><circle cx="13.8" cy="13" r="1.6" fill="#ffd65a" stroke="#b88119" stroke-width=".8"/></svg>
-            ADD THIS SOURCE
-          </p>
-          <div class="source-control">
-            <code id="source-address">https://tien0246.github.io/repo/</code>
-            <button id="copy-source" class="copy-button" type="button">
-              <svg viewBox="0 0 20 20" aria-hidden="true"><rect x="7" y="6" width="9" height="11" rx="1.5" fill="none" stroke="currentColor" stroke-width="1.5"/><path d="M12.5 6V4.5A1.5 1.5 0 0 0 11 3H5.5A1.5 1.5 0 0 0 4 4.5v8A1.5 1.5 0 0 0 5.5 14H7" fill="none" stroke="currentColor" stroke-width="1.5"/></svg>
-              <span>Copy URL</span>
-            </button>
-          </div>
-          <p id="copy-status" class="copy-status" role="status" aria-live="polite"></p>
+  <main class="shell" id="main">
+    <section class="catalog" id="packages" aria-labelledby="page-title">
+      <header class="repo-intro">
+        <h1 id="page-title">Packages</h1>
+        <img class="repo-art" src="assets/pocket-flat.webp" width="560" height="560" alt="" fetchpriority="high">
+        <div class="source-control" id="add-source">
+          <code id="source-address">https://tien0246.github.io/repo/</code>
+          <button id="copy-source" class="copy-button" type="button" aria-label="Copy source URL">
+            <svg viewBox="0 0 20 20" aria-hidden="true"><rect x="7" y="6" width="9" height="11" rx="1.5" fill="none" stroke="currentColor" stroke-width="1.5"/><path d="M12.5 6V4.5A1.5 1.5 0 0 0 11 3H5.5A1.5 1.5 0 0 0 4 4.5v8A1.5 1.5 0 0 0 5.5 14H7" fill="none" stroke="currentColor" stroke-width="1.5"/></svg>
+            <span>Copy</span>
+          </button>
+          <span id="copy-status" class="visually-hidden" role="status" aria-live="polite"></span>
         </div>
-      </div>
+      </header>
 
-      <div class="hero__art" aria-label="A package popping out of a blue pocket">
-        <span class="art-stamp" aria-hidden="true">GADGET<br>NO. 001</span>
-        <svg class="pocket-art" viewBox="0 0 620 510" role="img" aria-labelledby="pocket-title pocket-desc">
-          <title id="pocket-title">The 4D package pocket</title>
-          <desc id="pocket-desc">A friendly little robot peeks from a blue pocket as a Debian package pops out.</desc>
-          <defs>
-            <filter id="soft-shadow" x="-30%" y="-30%" width="160%" height="170%">
-              <feDropShadow dx="0" dy="12" stdDeviation="10" flood-color="#173c7c" flood-opacity=".24"/>
-            </filter>
-          </defs>
-          <circle class="art-orbit art-orbit--one" cx="323" cy="260" r="202" fill="none" stroke="#fff" stroke-opacity=".26" stroke-width="1.5" stroke-dasharray="2 10"/>
-          <circle class="art-orbit art-orbit--two" cx="323" cy="260" r="165" fill="none" stroke="#fff" stroke-opacity=".17" stroke-width="1"/>
-          <path class="spark spark--one" d="m111 174 5 13 13 5-13 5-5 13-5-13-13-5 13-5z" fill="#ffd65a"/>
-          <path class="spark spark--two" d="m505 261 4 10 10 4-10 4-4 10-4-10-10-4 10-4z" fill="#fff"/>
-          <path class="spark spark--three" d="m430 111 3 8 8 3-8 3-3 8-3-8-8-3 8-3z" fill="#ff6470"/>
-
-          <g class="little-bot" filter="url(#soft-shadow)">
-            <circle cx="325" cy="220" r="79" fill="#fff" stroke="#315fae" stroke-width="9"/>
-            <path d="M263 198q62-45 124 0" fill="none" stroke="#5886da" stroke-width="8" stroke-linecap="round"/>
-            <ellipse cx="307" cy="207" rx="7" ry="10" fill="#172943"/>
-            <ellipse cx="343" cy="207" rx="7" ry="10" fill="#172943"/>
-            <circle cx="309" cy="204" r="2.3" fill="#fff"/>
-            <circle cx="345" cy="204" r="2.3" fill="#fff"/>
-            <circle cx="325" cy="228" r="10" fill="#ee4d5a" stroke="#b83240" stroke-width="1.5"/>
-            <path d="M325 239v22m0-2c-10 17-24 15-31 4m31-4c10 17 24 15 31 4" fill="none" stroke="#263856" stroke-width="2.5" stroke-linecap="round"/>
-            <path d="m285 225-35-5m35 14-38 3m38 7-34 12m80-31 35-5m-35 14 38 3m-38 7 34 12" fill="none" stroke="#263856" stroke-width="2" stroke-linecap="round"/>
-            <path d="M265 280q60 28 120 0" fill="none" stroke="#e94c59" stroke-width="12"/>
-            <circle class="mascot-bell" cx="325" cy="291" r="10" fill="#ffd65a" stroke="#b88119" stroke-width="2"/>
-            <path d="M321 292h8m-4-5v9" stroke="#996713" stroke-width="1.4" stroke-linecap="round"/>
-          </g>
-
-          <g class="gadget-card" filter="url(#soft-shadow)">
-            <path d="m260 73 138 19-10 103-138-19z" fill="#fff" stroke="#315fae" stroke-width="4" stroke-linejoin="round"/>
-            <path d="m260 73 138 19-3 23-138-19z" fill="#ffd65a"/>
-            <circle cx="280" cy="87" r="3" fill="#315fae"/>
-            <circle cx="389" cy="102" r="3" fill="#315fae"/>
-            <rect x="276" y="111" width="41" height="42" rx="8" fill="#e8f0ff"/>
-            <path d="M287 122h18v21h-18zM287 128h18m-12-6v6" fill="none" stroke="#5886da" stroke-width="2" stroke-linejoin="round"/>
-            <text x="327" y="129" fill="#172943" font-size="16" font-family="monospace" font-weight="700">.deb</text>
-            <text x="327" y="147" fill="#6b7790" font-size="9" font-family="monospace" letter-spacing="1">GADGET INSIDE</text>
-          </g>
-
-          <g class="pocket-shell" filter="url(#soft-shadow)">
-            <path d="M136 270q17-24 46-16 142 49 285 0 29-9 47 16l-30 155q-154 73-318 0z" fill="#244887" stroke="#fff" stroke-width="6" stroke-linejoin="round"/>
-            <path d="M154 270q153 56 302 0" fill="none" stroke="#ef4d5a" stroke-width="17" stroke-linecap="round"/>
-            <path d="M157 292q145 52 297 0l-24 112q-129 58-249 0z" fill="#5886da" stroke="#fff" stroke-width="4" stroke-linejoin="round"/>
-            <path d="M175 307q125 43 259 0l-18 83q-113 48-222 0z" fill="none" stroke="#dce8ff" stroke-width="2" stroke-dasharray="3 9" stroke-linecap="round"/>
-            <path d="M282 324q27 7 54 0" fill="none" stroke="#315fae" stroke-width="5" stroke-linecap="round"/>
-            <circle cx="309" cy="347" r="19" fill="#fff" stroke="#315fae" stroke-width="3"/>
-            <circle cx="309" cy="347" r="12" fill="#ffd65a" stroke="#b88119" stroke-width="2"/>
-            <path d="M304 348h10m-5-6v11" stroke="#996713" stroke-width="1.6" stroke-linecap="round"/>
-          </g>
-          <path class="art-caption-line" d="M150 457h340" stroke="#fff" stroke-opacity=".45" stroke-width="1"/>
-          <text class="art-caption" x="320" y="481" text-anchor="middle" fill="#fff" fill-opacity=".9" font-size="10" font-family="monospace" letter-spacing="2">REACH IN. FIND SOMETHING GOOD.</text>
-        </svg>
-      </div>
-      <span class="hero__scribble" aria-hidden="true">♪</span>
-    </section>
-
-    <section class="catalog shell" id="packages" aria-labelledby="catalog-title">
-      <div class="catalog__heading">
-        <div>
-          <p class="eyebrow eyebrow--blue">TAKE A LOOK</p>
-          <h2 id="catalog-title">Inside the pocket<span class="heading__period">.</span></h2>
-        </div>
-        <p id="package-count" class="package-count" aria-live="polite">Loading</p>
-      </div>
-
-      <div class="catalog-tools">
-        <label class="search-field" for="package-search">
+      <div class="package-tools">
+        <label class="search-field">
           <svg viewBox="0 0 20 20" aria-hidden="true"><circle cx="8.5" cy="8.5" r="5.5" fill="none" stroke="currentColor" stroke-width="1.7"/><path d="m13 13 4 4" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/></svg>
           <span class="visually-hidden">Search packages</span>
-          <input id="package-search" type="search" placeholder="Find a package…" autocomplete="off">
-          <kbd>/</kbd>
+          <input id="package-search" type="search" placeholder="Search packages" autocomplete="off">
         </label>
-        <label class="section-field" for="section-filter">
-          <span class="visually-hidden">Filter by section</span>
-          <select id="section-filter">
-            <option value="">Every section</option>
-          </select>
-        </label>
-        <a class="raw-index" href="Packages.bz2" aria-label="Download raw package index">
+        <a class="raw-index" href="Packages.bz2" aria-label="Open raw package index">
           <svg viewBox="0 0 20 20" aria-hidden="true"><path d="M10 3v9m-4-4 4 4 4-4M4 14v3h12v-3" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
           <span>Index</span>
         </a>
+        <output id="package-count" class="visually-hidden" aria-live="polite">Loading</output>
       </div>
 
-      <p id="package-status" class="package-status" role="status" aria-live="polite">Loading packages…</p>
+      <p id="package-status" class="package-status" role="status" aria-live="polite" hidden></p>
       <ul id="package-list" class="package-list" aria-label="Available packages"></ul>
-      <noscript><p class="noscript-note">Turn on JavaScript to browse packages, or <a href="Packages.bz2">open the raw index</a>.</p></noscript>
+      <noscript><p class="noscript-note">JavaScript is required to filter packages. <a href="Packages.bz2">Open the raw index</a>.</p></noscript>
     </section>
   </main>
-
-  <footer class="footer">
-    <div class="shell footer__inner">
-      <a class="footer__brand" href="./">repo<span>.</span></a>
-      <span>A little source for curious iPhones.</span>
-      <a href="https://github.com/tien0246/repo" target="_blank" rel="noreferrer">Source on GitHub ↗</a>
-    </div>
-  </footer>
 </body>
 </html>
