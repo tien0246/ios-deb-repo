@@ -1,37 +1,42 @@
-# RootHide LLDB 20 APT repository
+# iOS APT package repository
 
-This repository hosts the current LLDB 20 / Pwndbg packages built for
-`iphoneos-arm64e` and RootHide. The packages were tested on an iPhone 10,2
+This is a generic flat APT repository for jailbreak `.deb` packages. Its
+initial contents are LLDB 20, Pwndbg, and their Python runtime packages, built
+for RootHide on `iphoneos-arm64e`. Those packages were tested on an iPhone 10,2
 running iOS 16; other device and bootstrap combinations are not verified.
+Future tweaks and packages can be added without changing the repository setup.
 
 ## Add the source
 
 Import this URL in Sileo or Zebra:
 
 ```text
-https://tien0246.github.io/roothide-lldb20/
+https://tien0246.github.io/ios-deb-repo/
 ```
 
 Launch Pwndbg with `/usr/bin/pwndbg-lldb`. `/usr/bin/lldb` starts plain LLDB.
 
 ## Packages
 
-The `pool/` directory contains the installable packages for the tested setup:
+The `pool/` directory currently contains these packages for the tested setup:
 
 - Pwndbg 2025.05.30, RootHide package revision 1.9
 - LLDB and debugserver 20.1.8
 - Python 3.12.14 and its LLDB runtime library
 
-RootHide `roothide`, `libiosexec1`, `libedit0`, and the Python runtime
-dependencies are bootstrap prerequisites and are not mirrored here. Let the
-package manager resolve them from the jailbreak's configured sources.
+The current LLDB/Pwndbg packages require RootHide `roothide`, `libiosexec1`,
+`libedit0`, and Python runtime libraries from the jailbreak bootstrap. They
+are not mirrored here; let the package manager resolve dependencies from the
+device's configured sources. Dependencies for future packages can be supplied
+by this repo or by other configured APT sources.
 
 ## Updating the repository
 
-Add new `.deb` files under `pool/` and push them to `main`. GitHub Actions
-regenerates the flat APT indexes and deploys the site to GitHub Pages. Multiple
-versions of a package can remain in `pool/`; the index includes all of them and
-APT selects the newest compatible version.
+Add new iOS `.deb` files anywhere under `pool/` and push them to `main`. GitHub
+Actions scans the directory, derives the repository architectures from package
+metadata, regenerates the flat APT indexes, and deploys the site to GitHub
+Pages. Multiple versions of a package can remain in `pool/`; the index includes
+all of them and APT selects the newest compatible version.
 
 From a clone, the update flow is:
 
@@ -44,7 +49,8 @@ git push
 
 The repository is public and its `Release` metadata is unsigned. Index and
 package hashes are published over HTTPS; only add this source if you trust its
-owner. These are local RootHide builds, not official upstream releases.
+owner. The initial LLDB/Pwndbg packages are local RootHide builds, not official
+upstream releases.
 
 Upstream projects: [Pwndbg](https://github.com/pwndbg/pwndbg),
 [LLVM/LLDB](https://github.com/llvm/llvm-project),

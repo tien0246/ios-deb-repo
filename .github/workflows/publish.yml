@@ -34,19 +34,20 @@ jobs:
 
       - name: Build flat APT repository
         run: |
-          set -eu
+          set -euo pipefail
           mkdir -p site
           cp -a pool site/pool
           cp README.md index.html site/
           touch site/.nojekyll
 
-          for deb in pool/*.deb; do
-            arch="$(dpkg-deb -f "$deb" Architecture)"
-            if [ "$arch" != iphoneos-arm64e ] && [ "$arch" != all ]; then
-              echo "Unsupported package architecture $arch: $deb" >&2
-              exit 1
-            fi
-          done
+          mapfile -d '' debs < <(find pool -type f -name '*.deb' -print0)
+          test "${#debs[@]}" -gt 0
+          architectures="$(
+            for deb in "${debs[@]}"; do
+              dpkg-deb -f "$deb" Architecture
+            done | sort -u | grep -v '^all$' | paste -sd ' ' -
+          )"
+          test -n "$architectures"
 
           apt-ftparchive packages pool > site/Packages
           gzip -n -9 -c site/Packages > site/Packages.gz
@@ -57,13 +58,13 @@ jobs:
           cd site
           apt-ftparchive \
             -o APT::FTPArchive::Release::Origin=tien0246 \
-            -o 'APT::FTPArchive::Release::Label=RootHide LLDB 20' \
+            -o 'APT::FTPArchive::Release::Label=iOS APT Repository' \
             -o APT::FTPArchive::Release::Suite=stable \
             -o APT::FTPArchive::Release::Version=1 \
             -o APT::FTPArchive::Release::Codename=ios \
-            -o APT::FTPArchive::Release::Architectures=iphoneos-arm64e \
+            -o "APT::FTPArchive::Release::Architectures=$architectures" \
             -o APT::FTPArchive::Release::Components=main \
-            -o 'APT::FTPArchive::Release::Description=LLDB 20 and Pwndbg for RootHide' \
+            -o 'APT::FTPArchive::Release::Description=Personal repository for jailbroken iOS packages' \
             release . > Release
 
       - name: Upload Pages artifact
