@@ -38,6 +38,7 @@ jobs:
           mkdir -p site
           cp -a pool site/pool
           cp README.md index.html site/
+          cp -a assets site/assets
           touch site/.nojekyll
 
           test -n "$(find pool -type f -name '*.deb' -print -quit)"
