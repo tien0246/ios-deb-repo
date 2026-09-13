@@ -324,7 +324,12 @@ button, a, select { -webkit-tap-highlight-color: transparent; }
 }
 
 @media (prefers-reduced-motion: reduce) {
-  *, *::before, *::after { scroll-behavior: auto !important; animation-duration: .01ms !important; animation-iteration-count: 1 !important; transition-duration: .01ms !important; }
+  *, *::before, *::after {
+    scroll-behavior: auto !important;
+    animation: none !important;
+    transition: none !important;
+  }
+  .index-ready .pocket__topline { opacity: 1; transform: none; }
   .package-list.is-entering .package-row--enter { opacity: 1; transform: none; }
   .route-line__packet { right: 0; left: auto; opacity: 1; transform: none; }
 }
