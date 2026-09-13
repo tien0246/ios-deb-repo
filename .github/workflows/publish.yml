@@ -1,0 +1,76 @@
+name: Build and publish APT repository
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: github-pages
+  cancel-in-progress: true
+
+jobs:
+  deploy:
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v6
+
+      - name: Configure GitHub Pages
+        uses: actions/configure-pages@v5
+
+      - name: Install APT repository tools
+        run: |
+          sudo apt-get update
+          sudo apt-get install --no-install-recommends -y apt-utils bzip2 dpkg-dev gzip xz-utils zstd
+
+      - name: Build flat APT repository
+        run: |
+          set -eu
+          mkdir -p site
+          cp -a pool site/pool
+          cp README.md index.html site/
+          touch site/.nojekyll
+
+          for deb in pool/*.deb; do
+            arch="$(dpkg-deb -f "$deb" Architecture)"
+            if [ "$arch" != iphoneos-arm64e ] && [ "$arch" != all ]; then
+              echo "Unsupported package architecture $arch: $deb" >&2
+              exit 1
+            fi
+          done
+
+          apt-ftparchive packages pool > site/Packages
+          gzip -n -9 -c site/Packages > site/Packages.gz
+          bzip2 -9 -c site/Packages > site/Packages.bz2
+          xz -9 -c site/Packages > site/Packages.xz
+          zstd -19 -q -c site/Packages > site/Packages.zst
+
+          cd site
+          apt-ftparchive \
+            -o APT::FTPArchive::Release::Origin=tien0246 \
+            -o 'APT::FTPArchive::Release::Label=RootHide LLDB 20' \
+            -o APT::FTPArchive::Release::Suite=stable \
+            -o APT::FTPArchive::Release::Version=1 \
+            -o APT::FTPArchive::Release::Codename=ios \
+            -o APT::FTPArchive::Release::Architectures=iphoneos-arm64e \
+            -o APT::FTPArchive::Release::Components=main \
+            -o 'APT::FTPArchive::Release::Description=LLDB 20 and Pwndbg for RootHide' \
+            release . > Release
+
+      - name: Upload Pages artifact
+        uses: actions/upload-pages-artifact@v4
+        with:
+          path: site
+
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
