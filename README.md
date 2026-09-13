@@ -11,7 +11,7 @@ Future tweaks and packages can be added without changing the repository setup.
 Import this URL in Sileo or Zebra:
 
 ```text
-https://tien0246.github.io/ios-deb-repo/
+https://tien0246.github.io/repo/
 ```
 
 Launch Pwndbg with `/usr/bin/pwndbg-lldb`. `/usr/bin/lldb` starts plain LLDB.
