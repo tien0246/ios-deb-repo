@@ -2,6 +2,7 @@
   const sourceAddress = document.getElementById("source-address");
   const routeLine = document.querySelector(".route-line");
   const brand = document.querySelector(".brand");
+  const pocket = document.querySelector(".pocket");
   const copyButton = document.getElementById("copy-source");
   const copyStatus = document.getElementById("copy-status");
   const searchInput = document.getElementById("package-search");
@@ -13,6 +14,7 @@
   let packages = [];
   let copyTimer;
   let bellTimer;
+  let routeTimer;
 
   function setRouteDistance() {
     if (!routeLine) return;
@@ -181,6 +183,10 @@
       requestAnimationFrame(() => brand.classList.add("is-copied"));
       window.clearTimeout(bellTimer);
       bellTimer = window.setTimeout(() => brand.classList.remove("is-copied"), 520);
+      pocket.classList.remove("is-sending");
+      requestAnimationFrame(() => pocket.classList.add("is-sending"));
+      window.clearTimeout(routeTimer);
+      routeTimer = window.setTimeout(() => pocket.classList.remove("is-sending"), 720);
     } catch {
       copyStatus.textContent = "Copy failed — select the URL and copy it manually.";
     }

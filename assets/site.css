@@ -93,7 +93,7 @@ button, a, select { -webkit-tap-highlight-color: transparent; }
 }
 
 .page { padding-top: 34px; padding-bottom: 62px; }
-.page-note { margin: 0 0 18px; color: var(--muted); font-size: 14px; }
+.page-note { margin: 0 0 18px; color: var(--blue-dark); font-size: 15px; }
 
 .pocket {
   position: relative;
@@ -104,20 +104,20 @@ button, a, select { -webkit-tap-highlight-color: transparent; }
   box-shadow: 0 2px 8px rgba(32, 66, 120, .08);
 }
 .pocket__topline {
-  min-height: 34px;
+  min-height: 40px;
   display: grid;
   grid-template-columns: max-content minmax(32px, 1fr) max-content;
   align-items: center;
   gap: 12px;
   padding: 0 22px;
-  border-bottom: 1px solid var(--blue-line);
-  background: var(--blue-pale);
-  color: var(--blue-dark);
+  border-bottom: 3px solid var(--red);
+  background: var(--blue);
+  color: var(--button-ink);
   font: 11px/1 var(--mono);
   transform-origin: top center;
 }
 .index-ready .pocket__topline { animation: pocket-open 360ms cubic-bezier(.2, .75, .25, 1) both; }
-.route-line { position: relative; height: 1px; background: var(--blue-line); }
+.route-line { position: relative; height: 1px; background: rgba(255, 255, 255, .58); }
 .route-line__packet {
   position: absolute;
   top: 50%;
@@ -132,6 +132,7 @@ button, a, select { -webkit-tap-highlight-color: transparent; }
   transform: translateX(0);
 }
 .index-ready .route-line__packet { animation: route-send 760ms cubic-bezier(.2, .75, .25, 1) 80ms both; }
+.pocket.is-sending .route-line__packet { animation: route-send 600ms cubic-bezier(.2, .75, .25, 1) both; }
 
 .pocket__body { padding: 20px 22px 15px; }
 .pocket__heading, .section-heading {
