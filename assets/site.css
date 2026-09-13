@@ -86,7 +86,7 @@ button, a, select { -webkit-tap-highlight-color: transparent; }
 }
 .github-link svg { width: 14px; height: 14px; }
 .github-link:hover { text-decoration: underline; }
-.brand:focus-visible, .github-link:focus-visible, .raw-index:focus-visible,
+.brand:focus-visible, .github-link:focus-visible, .source-action:focus-visible,
 .download-link:focus-visible, .skip-link:focus-visible {
   outline: 3px solid var(--blue);
   outline-offset: 3px;
@@ -96,7 +96,7 @@ button, a, select { -webkit-tap-highlight-color: transparent; }
 .repo-intro {
   display: grid;
   grid-template-columns: minmax(0, 1fr) 142px;
-  grid-template-areas: "title art" "source art";
+  grid-template-areas: "title art" "source art" "actions art";
   align-items: center;
   gap: 8px 22px;
   padding: 15px 18px 15px 20px;
@@ -165,10 +165,33 @@ button, a, select { -webkit-tap-highlight-color: transparent; }
 }
 .copy-button.is-copied { border-color: #24633e; background: #24633e; }
 .repo-intro.is-copying .repo-art { animation: pocket-chime 420ms ease-out; }
+.source-actions {
+  grid-area: actions;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.source-action {
+  min-width: 140px;
+  min-height: 44px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0 12px;
+  border: 1px solid var(--blue-action);
+  border-radius: 4px;
+  background: #fff;
+  color: var(--blue-action);
+  font-size: 12px;
+  font-weight: 650;
+  text-decoration: none;
+  transition: background-color 160ms ease, color 160ms ease;
+}
+.source-action:hover { background: var(--blue-action); color: #fff; }
 
 .package-tools {
   display: grid;
-  grid-template-columns: minmax(0, 1fr) max-content;
+  grid-template-columns: minmax(0, 1fr);
   align-items: center;
   gap: 10px;
   margin-top: 27px;
@@ -204,21 +227,6 @@ button, a, select { -webkit-tap-highlight-color: transparent; }
   border-color: var(--blue-action);
   outline-color: rgba(49,95,174,.32);
 }
-.raw-index {
-  min-width: 70px;
-  min-height: 44px;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  gap: 5px;
-  padding: 0 6px;
-  color: var(--blue-action);
-  font-size: 12px;
-  font-weight: 650;
-  text-decoration: none;
-}
-.raw-index svg { width: 17px; height: 17px; }
-.raw-index:hover { text-decoration: underline; }
 .package-status { margin: 16px 0; color: var(--text); font-size: 13px; }
 .package-list { margin: 0; padding: 0; list-style: none; }
 .package-row {
@@ -274,7 +282,7 @@ button, a, select { -webkit-tap-highlight-color: transparent; }
   .catalog { padding-top: 14px; padding-bottom: 48px; }
   .repo-intro {
     grid-template-columns: minmax(0, 1fr) 104px;
-    grid-template-areas: "title art" "source source";
+    grid-template-areas: "title art" "source source" "actions actions";
     gap: 10px 8px;
     padding: 12px;
   }
@@ -283,13 +291,14 @@ button, a, select { -webkit-tap-highlight-color: transparent; }
   .source-control { grid-template-columns: minmax(0, 1fr) 72px; gap: 7px; }
   .source-control code { font-size: 10px; }
   .copy-button { min-width: 72px; padding-inline: 8px; }
+  .source-actions { width: 100%; }
+  .source-action { min-width: 0; flex: 1 1 0; padding-inline: 8px; }
   .package-tools {
-    grid-template-columns: minmax(0, 1fr) max-content;
+    grid-template-columns: minmax(0, 1fr);
     gap: 8px;
     margin-top: 20px;
     padding-bottom: 9px;
   }
-  .raw-index { justify-self: end; }
   .package-row { grid-template-columns: minmax(0, 1fr) 82px; gap: 10px; padding: 14px 2px; }
   .package-name { font-size: 14px; }
   .download-link { min-width: 78px; padding-inline: 7px; font-size: 11px; }

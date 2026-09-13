@@ -40,8 +40,12 @@
             <svg viewBox="0 0 20 20" aria-hidden="true"><rect x="7" y="6" width="9" height="11" rx="1.5" fill="none" stroke="currentColor" stroke-width="1.5"/><path d="M12.5 6V4.5A1.5 1.5 0 0 0 11 3H5.5A1.5 1.5 0 0 0 4 4.5v8A1.5 1.5 0 0 0 5.5 14H7" fill="none" stroke="currentColor" stroke-width="1.5"/></svg>
             <span>Copy</span>
           </button>
-          <span id="copy-status" class="visually-hidden" role="status" aria-live="polite"></span>
         </div>
+        <div class="source-actions" aria-label="Add this source to a package manager">
+          <a class="source-action" href="sileo://source/https://tien0246.github.io/repo/" aria-label="Add this repository to Sileo">Add to Sileo</a>
+          <a class="source-action" href="zbra://sources/add/https://tien0246.github.io/repo/" aria-label="Add this repository to Zebra">Add to Zebra</a>
+        </div>
+        <span id="copy-status" class="visually-hidden" role="status" aria-live="polite"></span>
       </header>
 
       <div class="package-tools">
@@ -50,16 +54,12 @@
           <span class="visually-hidden">Search packages</span>
           <input id="package-search" type="search" placeholder="Search packages" autocomplete="off">
         </label>
-        <a class="raw-index" href="Packages.bz2" aria-label="Open raw package index">
-          <svg viewBox="0 0 20 20" aria-hidden="true"><path d="M10 3v9m-4-4 4 4 4-4M4 14v3h12v-3" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
-          <span>Index</span>
-        </a>
         <output id="package-count" class="visually-hidden" aria-live="polite">Loading</output>
       </div>
 
       <p id="package-status" class="package-status" role="status" aria-live="polite" hidden></p>
       <ul id="package-list" class="package-list" aria-label="Available packages"></ul>
-      <noscript><p class="noscript-note">JavaScript is required to filter packages. <a href="Packages.bz2">Open the raw index</a>.</p></noscript>
+      <noscript><p class="noscript-note">JavaScript is required to browse packages.</p></noscript>
     </section>
   </main>
 </body>
