@@ -33,10 +33,11 @@ by this repo or by other configured APT sources.
 ## Updating the repository
 
 Add new iOS `.deb` files anywhere under `pool/` and push them to `main`. GitHub
-Actions scans the directory, derives the repository architectures from package
-metadata, regenerates the flat APT indexes, and deploys the site to GitHub
-Pages. Multiple versions of a package can remain in `pool/`; the index includes
-all of them and APT selects the newest compatible version.
+Actions scans the directory, advertises common iOS architectures plus any
+additional architecture found in package metadata, regenerates the flat APT
+indexes, and deploys the site to GitHub Pages. Architecture-independent
+packages are included as well. Multiple versions can remain in `pool/`; the
+index includes them and APT selects the newest compatible version.
 
 From a clone, the update flow is:
 

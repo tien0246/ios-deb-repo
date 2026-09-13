@@ -40,12 +40,16 @@ jobs:
           cp README.md index.html site/
           touch site/.nojekyll
 
-          mapfile -d '' debs < <(find pool -type f -name '*.deb' -print0)
-          test "${#debs[@]}" -gt 0
+          test -n "$(find pool -type f -name '*.deb' -print -quit)"
+          package_architectures="$(
+            find pool -type f -name '*.deb' -print |
+              while IFS= read -r deb; do
+                dpkg-deb -f "$deb" Architecture
+              done
+          )"
           architectures="$(
-            for deb in "${debs[@]}"; do
-              dpkg-deb -f "$deb" Architecture
-            done | sort -u | grep -v '^all$' | paste -sd ' ' -
+            printf '%s\n' iphoneos-arm iphoneos-arm64 iphoneos-arm64e "$package_architectures" |
+              sort -u | grep -v '^all$' | paste -sd ' ' -
           )"
           test -n "$architectures"
 
